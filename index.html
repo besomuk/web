@@ -1,6 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opalim te...</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1a1a2e;
+            color: white;
+        }
+        .container {
+            background: #16213e;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            border: 1px solid #0f3460;
+        }
+        h2 { margin-bottom: 10px; color: #e94560; }
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #0f3460;
+            border-radius: 8px;
+            background: #1a1a2e;
+            color: white;
+            font-size: 18px;
+            outline: none;
+            text-align: center;
+        }
+        input:focus { border-color: #e94560; }
+        #answer {
+            margin-top: 25px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #00d2ff;
+            min-height: 1.6em;
+        }
+    </style>
+</head>
 <body>
-    <p>Di Bi Dus</p>
+
+<div class="container">
+    <h2 id="question">Učitavam...</h2>
+    <input type="text" id="userInput" placeholder="Kucaj ovde..." autocomplete="off">
+    <div id="answer"></div>
+</div>
+
+<script>
+    const database = [
+        { q: "osam", a: "Na mome te nosam." },
+        { q: "šest", a: "Na mome si čest." },
+        { q: "sedam", a: "Na mome te gledam." },
+        { q: "Audi", a: "Moj ti naudi." },
+        { q: "Snupi", a: "Moj te lupi." },
+        { q: "nalog", a: "Probaš mi malog." },
+        { q: "Klaja", a: "Pokvasićeš jaja." },
+        { q: "Raja", a: "Apiš me za jaja." },
+        { q: "Baja", a: "Počešeš mi jaja." },
+        { q: "Dino", a: "Moj te baci preko Šar-planine." },
+        { q: "Zlatko", a: "Nataknem te kratko." },
+        { q: "jupi", a: "Moj te lupi." },
+        { q: "7 i po", a: "Moj te pip'o." },
+        { q: "Betmen", a: "U dupe ti metnem" },
+    ];
+
+    let currentPair = {};
+    const questionElement = document.getElementById('question');
+    const inputElement = document.getElementById('userInput');
+    const answerElement = document.getElementById('answer');
+
+    // Replaces Balkan special characters with their basic counterparts
+    function normalize(text) {
+        return text.toLowerCase()
+            .replace(/š/g, 's')
+            .replace(/ć/g, 'c')
+            .replace(/č/g, 'c')
+            .replace(/ž/g, 'z')
+            .replace(/đ/g, 'd')
+            .trim();
+    }
+
+    function setNextQuestion() {
+        const randomIndex = Math.floor(Math.random() * database.length);
+        currentPair = database[randomIndex];
+        questionElement.textContent = `Reci "${currentPair.q}"`;
+        inputElement.value = "";
+        answerElement.textContent = "";
+    }
+
+    inputElement.addEventListener('input', function() {
+        const cleanInput = normalize(this.value);
+        const cleanQuestion = normalize(currentPair.q);
+
+        if (cleanInput === cleanQuestion) {
+            answerElement.textContent = currentPair.a;
+            setTimeout(setNextQuestion, 3000);
+        }
+    });
+
+    // Initialize the first question
+    setNextQuestion();
+</script>
+
 </body>
 </html>
